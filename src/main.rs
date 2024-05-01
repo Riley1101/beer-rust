@@ -1,5 +1,5 @@
-mod scanner;
+use rbeer::runnner;
 
 fn main() {
-    scanner::read_args();
+    runnner::run();
 }
