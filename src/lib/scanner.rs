@@ -36,8 +36,8 @@ impl Scanner {
                 'A'..='z' => {
                     println!("is a char");
                 }
-                _ => {
-                    println!("special");
+                val => {
+                    println!("special {}", val);
                 }
             },
             None => (),
