@@ -50,10 +50,12 @@ impl Scanner {
         }
     }
 
-    pub fn set_tokens(self: &mut Self, source: String) {
+    /// Setter for source in Scanner
+    pub fn set_source(self: &mut Self, source: String) {
         self.source = source;
     }
 
+    /// Start scanning in the source string
     pub fn scan_tokens(self: &mut Self) {
         while !self.is_end() {
             self.scan_token();
@@ -103,7 +105,6 @@ impl Scanner {
                 'A'..='z' => {
                     println!("is a char");
                 }
-                // Escape space and new lines
                 ' ' | '\n' => {}
                 val => {
                     println!("Unexpected characters {}", val);
@@ -113,6 +114,14 @@ impl Scanner {
         };
     }
 
+    /// Consumes the next character in the source file and returns it.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// let next_char = self.advance(); // get a character
+    ///     
+    /// ```
     fn advance(self: &mut Self) -> Option<char> {
         let c = self.source.chars().nth(self.current);
         self.current += 1;
