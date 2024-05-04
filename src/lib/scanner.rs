@@ -78,6 +78,7 @@ impl Scanner {
     /// Start scanning in the source string
     pub fn scan_tokens(self: &mut Self) {
         while !self.is_end() {
+            self.start = self.current;
             self.scan_token();
         }
     }
@@ -119,12 +120,8 @@ impl Scanner {
                 '=' => {
                     self.add_token(TokenType::EQUAL);
                 }
-                '0'..='9' => {
-                    println!("is a number");
-                }
-                'A'..='z' => {
-                    println!("is a char");
-                }
+                '0'..='9' => {}
+                'A'..='z' => {}
                 ' ' | '\n' => {}
                 val => {
                     println!("Unexpected characters {}", val);
@@ -161,7 +158,8 @@ impl Scanner {
     }
 
     fn add_token(self: &mut Self, token: TokenType) {
-        println!("{}", token);
+        let literal = &self.source[self.start..self.current];
+        println!("Literal = {}", literal);
     }
 }
 

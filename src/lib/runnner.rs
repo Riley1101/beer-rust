@@ -38,11 +38,9 @@ pub fn read_args(cb: Callback) {
 }
 
 fn do_magic(input: String) {
-    println!("Running code \n {input}");
     let mut scanner = Scanner::new();
     scanner.set_source(input);
     scanner.scan_tokens();
-    println!("Scanner {} \n", scanner);
 }
 
 pub fn run() {

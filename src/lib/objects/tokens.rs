@@ -1,4 +1,12 @@
+#![allow(dead_code)]
 use std::fmt::Display;
+
+#[derive(Debug)]
+pub enum LiteralType {
+    STRING,
+    NUMBER,
+    NONE,
+}
 
 #[derive(Debug)]
 pub enum TokenType {
@@ -56,12 +64,40 @@ impl Display for TokenType {
     }
 }
 
+/// Token struct for each lexeme
 #[derive(Debug)]
 pub struct Token {
+    /// Type of the token
     token_type: TokenType,
+    /// Actual string slice in source
     lexeme: String,
+    /// Type of literals in the language - e.g:string,number
     literal: String,
+    /// Line number of token to be found
     line: usize,
+}
+
+impl Token {
+    /// A token struct.
+    ///
+    /// # Arguments
+    ///
+    /// * `token_type` - Type of token
+    /// * `lexeme` - Literal string slice from source
+    /// * `literal` - Type of literals in the language
+    /// * `line` - Line number in source code that token found
+    ///
+    /// # Returns `Token`
+    ///
+    /// ```
+    fn new(token_type: TokenType, lexeme: String, literal: String, line: usize) -> Token {
+        Token {
+            token_type,
+            lexeme,
+            literal,
+            line,
+        }
+    }
 }
 
 impl Display for Token {
