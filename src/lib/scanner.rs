@@ -1,4 +1,24 @@
+// TODO better loggin
+#![allow(dead_code)]
 use crate::objects::tokens::{Token, TokenType};
+use std::fmt::Display;
+
+#[derive(Debug)]
+pub struct TokenVec {
+    tokens: Vec<Token>,
+}
+
+impl TokenVec {
+    fn new() -> TokenVec {
+        TokenVec { tokens: vec![] }
+    }
+}
+
+impl Display for TokenVec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "\n Vector : {:?}", self)
+    }
+}
 
 /// The scanner takes in raw source code as a series of characters and groups it into a series of chunks we call tokens.
 #[allow(dead_code)] // TODO removed dead_code
@@ -6,7 +26,7 @@ pub struct Scanner {
     /// The source string to be scanned
     source: String,
     /// A collection of tokens generated from source
-    tokens: Vec<Token>,
+    tokens: TokenVec,
     /// The current position of the scanner pointer
     current: usize,
     /// The start index to start the scan
@@ -42,7 +62,7 @@ impl Scanner {
     pub fn new() -> Self {
         Scanner {
             source: String::new(),
-            tokens: Vec::new(),
+            tokens: TokenVec::new(),
             current: 0,
             start: 0,
             end: 0,
@@ -128,11 +148,29 @@ impl Scanner {
         c
     }
 
+    /// Check if scanning gets the end of source
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// let next_char = self.advance(); // get a character
+    ///     
+    /// ```
     fn is_end(self: &Self) -> bool {
         self.current > self.source.len()
     }
 
     fn add_token(self: &mut Self, token: TokenType) {
         println!("{}", token);
+    }
+}
+
+impl Display for Scanner {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(
+            f,
+            "source - {} \n tokens - {} \n - {} \n",
+            self.source, self.tokens, self.current
+        )
     }
 }

@@ -42,6 +42,7 @@ fn do_magic(input: String) {
     let mut scanner = Scanner::new();
     scanner.set_source(input);
     scanner.scan_tokens();
+    println!("Scanner {} \n", scanner);
 }
 
 pub fn run() {
