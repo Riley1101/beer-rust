@@ -1,14 +1,14 @@
 #![allow(dead_code)]
 use std::fmt::Display;
 
-#[derive(Debug,Clone, Copy)]
+#[derive(Debug, Clone)]
 pub enum LiteralType {
     STRING,
     NUMBER,
     NONE,
 }
 
-#[derive(Debug,Clone, Copy)]
+#[derive(Debug, Clone)]
 pub enum TokenType {
     LEFTPAREN,
     RIGHTPAREN,
@@ -66,7 +66,7 @@ impl Display for TokenType {
 
 /// Token struct for each lexeme
 // !TODO try implementing `Drop` traits
-#[derive(Debug,Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct Token<'tok> {
     /// Type of the token
     token_type: TokenType,

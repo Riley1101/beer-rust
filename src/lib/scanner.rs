@@ -2,6 +2,8 @@
 #![allow(dead_code)]
 use crate::objects::tokens::{LiteralType, Token, TokenType};
 use std::fmt::Display;
+use std::ops::{Deref, DerefMut};
+use std::rc::Rc;
 
 #[derive(Debug, Clone)]
 pub struct TokenVec<'scn> {
@@ -81,11 +83,10 @@ impl<'scn> Scanner<'scn> {
     }
 
     /// Start scanning in the source string
-    pub fn scan_tokens(self: &'scn mut Self) {
-        // TODO! find work around between multiple mutables
+    pub fn scan_tokens(&'scn mut self) {
     }
 
-    pub fn scan_token(self: &'scn mut Self) {
+    pub fn scan_token(&'scn mut self) {
         let c = self.advance();
         match c {
             Some(val) => match val {
