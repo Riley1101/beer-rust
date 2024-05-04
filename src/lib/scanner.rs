@@ -3,7 +3,7 @@
 use crate::objects::tokens::{LiteralType, Token, TokenType};
 use std::fmt::Display;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TokenVec<'scn> {
     tokens: Vec<Token<'scn>>,
 }
@@ -11,6 +11,10 @@ pub struct TokenVec<'scn> {
 impl<'scn> TokenVec<'scn> {
     fn new() -> TokenVec<'scn> {
         TokenVec { tokens: vec![] }
+    }
+
+    pub fn push(self: &mut Self, token: Token<'scn>) {
+        self.tokens.push(token);
     }
 }
 
@@ -22,6 +26,7 @@ impl<'scn> Display for TokenVec<'scn> {
 
 /// The scanner takes in raw source code as a series of characters and groups it into a series of chunks we call tokens.
 #[allow(dead_code)] // TODO removed dead_code
+#[derive(Clone)]
 pub struct Scanner<'scn> {
     /// The source string to be scanned
     source: String,
@@ -76,49 +81,47 @@ impl<'scn> Scanner<'scn> {
     }
 
     /// Start scanning in the source string
-    pub fn scan_tokens(self: &mut Self) {
-        while !self.is_end() {
-            self.start = self.current;
-            self.scan_token();
-        }
+    pub fn scan_tokens(self: &'scn mut Self) {
+        // TODO! find work around between multiple mutables
     }
 
-    pub fn scan_token(self: &mut Self) {
+    pub fn scan_token(self: &'scn mut Self) {
         let c = self.advance();
         match c {
             Some(val) => match val {
                 '(' => {
                     // self.add_token(TokenType::LEFTPAREN);
+                    self.add_token(TokenType::LEFTPAREN, LiteralType::NONE);
                 }
                 ')' => {
-                    // self.add_token(TokenType::RIGHTPAREN);
+                    self.add_token(TokenType::RIGHTPAREN, LiteralType::NONE);
                 }
                 '{' => {
-                    // self.add_token(TokenType::LEFTBRACE);
+                    self.add_token(TokenType::LEFTBRACE, LiteralType::NONE);
                 }
                 '}' => {
-                    // self.add_token(TokenType::RIGHTPAREN);
+                    self.add_token(TokenType::RIGHTBRACE, LiteralType::NONE);
                 }
                 ',' => {
-                    // self.add_token(TokenType::COMMA);
+                    self.add_token(TokenType::COMMA, LiteralType::NONE);
                 }
                 '.' => {
-                    // self.add_token(TokenType::DOT);
+                    self.add_token(TokenType::DOT, LiteralType::NONE);
                 }
                 '-' => {
-                    // self.add_token(TokenType::MINUS);
+                    self.add_token(TokenType::MINUS, LiteralType::NONE);
                 }
                 '+' => {
-                    // self.add_token(TokenType::PLUS);
+                    self.add_token(TokenType::PLUS, LiteralType::NONE);
                 }
                 ';' => {
-                    // self.add_token(TokenType::SEMICOLON);
+                    self.add_token(TokenType::SEMICOLON, LiteralType::NONE);
                 }
                 '*' => {
-                    // self.add_token(TokenType::STAR);
+                    self.add_token(TokenType::STAR, LiteralType::NONE);
                 }
                 '=' => {
-                    // self.add_token(TokenType::EQUAL);
+                    self.add_token(TokenType::EQUAL, LiteralType::NONE);
                 }
                 '0'..='9' => {}
                 'A'..='z' => {}
@@ -157,10 +160,11 @@ impl<'scn> Scanner<'scn> {
         self.current > self.source.len()
     }
 
-    fn add_token(self: &mut Self, token_type: TokenType, literal: LiteralType) {
+    fn add_token(self: &'scn mut Self, token_type: TokenType, literal: LiteralType) {
         let lexeme = &self.source[self.start..self.current];
-        println!("Literal = {}", lexeme);
-        let token = Token::new(token_type, lexeme, "".to_string(), 1);
+        // TODO replace the literal
+        let token = Token::new(token_type, lexeme, literal, self.line);
+        self.tokens.push(token);
     }
 }
 
