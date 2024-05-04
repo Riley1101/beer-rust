@@ -67,18 +67,18 @@ impl Display for TokenType {
 /// Token struct for each lexeme
 // !TODO try implementing `Drop` traits
 #[derive(Debug)]
-pub struct Token {
+pub struct Token<'tok> {
     /// Type of the token
     token_type: TokenType,
     /// Actual string slice in source
-    lexeme: String,
+    lexeme: &'tok str,
     /// Type of literals in the language - e.g:string,number
     literal: String,
     /// Line number of token to be found
     line: usize,
 }
 
-impl Token {
+impl<'tok> Token<'tok> {
     /// A token struct.
     ///
     /// # Arguments
@@ -89,7 +89,7 @@ impl Token {
     /// * `line` - Line number in source code that token found
     ///
     /// # Returns `Token`
-    fn new(token_type: TokenType, lexeme: String, literal: String, line: usize) -> Token {
+    pub fn new(token_type: TokenType, lexeme: &'tok str, literal: String, line: usize) -> Token {
         Token {
             token_type,
             lexeme,
@@ -99,7 +99,7 @@ impl Token {
     }
 }
 
-impl Display for Token {
+impl<'tok> Display for Token<'tok> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
