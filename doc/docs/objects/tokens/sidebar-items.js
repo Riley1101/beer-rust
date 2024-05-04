@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["TokenType"],"struct":["Token"]};
+window.SIDEBAR_ITEMS = {"enum":["LiteralType","TokenType"],"struct":["Token"]};

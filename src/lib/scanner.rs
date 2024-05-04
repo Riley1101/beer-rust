@@ -158,8 +158,8 @@ impl Scanner {
     }
 
     fn add_token(self: &mut Self, token: TokenType) {
-        let literal = &self.source[self.start..self.current];
-        println!("Literal = {}", literal);
+        let lexeme = &self.source[self.start..self.current];
+        println!("Literal = {}", lexeme);
     }
 }
 

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["Scanner"]};
+window.SIDEBAR_ITEMS = {"struct":["Scanner","TokenVec"]};

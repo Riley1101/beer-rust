@@ -65,6 +65,7 @@ impl Display for TokenType {
 }
 
 /// Token struct for each lexeme
+// !TODO try implementing `Drop` traits
 #[derive(Debug)]
 pub struct Token {
     /// Type of the token
@@ -88,8 +89,6 @@ impl Token {
     /// * `line` - Line number in source code that token found
     ///
     /// # Returns `Token`
-    ///
-    /// ```
     fn new(token_type: TokenType, lexeme: String, literal: String, line: usize) -> Token {
         Token {
             token_type,
