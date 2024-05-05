@@ -79,18 +79,17 @@ impl Scanner {
         self.current += 1;
     }
 
-    fn build_token(&self, token_type: TokenType, literal: LiteralType) -> Token {
-        let lexeme = &self.source[self.start..self.current];
-        let token = Token::new(token_type, lexeme.to_string(), literal, self.line);
-        token
-    }
-
     /// Scan tokens
-    pub fn scan_token(&self, char: &Option<char>) -> Option<Token> {
+    pub fn scan_token(&mut self, char: &Option<char>) -> Option<Token> {
         let token = match char {
             Some(value) => match value {
                 '=' => {
-                    let token = self.build_token(TokenType::EQUAL, LiteralType::NONE);
+                    let token_type = if self.match_next("=") {
+                        TokenType::EQUALEQUAL
+                    } else {
+                        TokenType::EQUAL
+                    };
+                    let token = self.build_token(token_type, LiteralType::NONE);
                     Some(token)
                 }
                 '+' => {
@@ -138,12 +137,12 @@ impl Scanner {
         token
     }
 
-    /// Consumes the next character in the source file and returns it.
+    /// Get character at current location
     ///
     /// # Example
     ///
     /// ```
-    /// let next_char = self.advance(); // get a character
+    /// let next_char = self.get_current_char();
     ///     
     /// ```
     pub fn get_current_char(self: &Self) -> Option<char> {
@@ -151,16 +150,33 @@ impl Scanner {
         c
     }
 
-    /// Check if scanning gets the end of source
+    /// Check if  the end of source string
     ///
-    /// # Example
-    ///
-    /// ```
-    /// let next_char = self.advance(); // get a character
-    ///     
-    /// ```
     pub fn is_end(self: &Self) -> bool {
-        self.current > self.source.len()
+        self.current >= self.source.chars().count()
+    }
+
+    fn build_token(&self, token_type: TokenType, literal: LiteralType) -> Token {
+        println!("{:?}", self.source.chars());
+        println!("{} {}", self.start, self.current);
+        let lexeme = &self.source[self.start..self.current];
+        println!("{} ", lexeme);
+        let token = Token::new(token_type, lexeme.to_string(), literal, self.line);
+        token
+    }
+
+    // TODO  !DOING Check the next character to see if they matches
+    fn match_next(&mut self, expected: &str) -> bool {
+        if self.is_end() {
+            return false;
+        }
+        let char = &self.source[self.current..self.current];
+        println!("current char {}", char);
+        if char == expected {
+            return false;
+        }
+        self.current += 1;
+        true
     }
 }
 
@@ -174,16 +190,15 @@ impl Display for Scanner {
     }
 }
 
-pub fn scan_tokens<'scn>(input: String) -> TokenVec {
-    let mut scanner = Scanner::new(input);
+pub fn scan_tokens(input: String) -> TokenVec {
     let mut token_vec = TokenVec::new();
+    let mut scanner = Scanner::new(input);
     while !scanner.is_end() {
         let c = scanner.get_current_char();
         scanner.forward();
         let t = scanner.scan_token(&c);
         match t {
             Some(val) => {
-                println!("{}", val);
                 token_vec.push(val);
                 scanner.sync();
             }
@@ -191,6 +206,6 @@ pub fn scan_tokens<'scn>(input: String) -> TokenVec {
         }
         scanner.sync();
     }
-    println!("{}", token_vec);
+    println!("{token_vec}");
     token_vec
 }
