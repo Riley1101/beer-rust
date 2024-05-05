@@ -1,4 +1,12 @@
+#![allow(dead_code)]
 use std::fmt::Display;
+
+#[derive(Debug)]
+pub enum LiteralType {
+    STRING,
+    NUMBER,
+    NONE,
+}
 
 #[derive(Debug)]
 pub enum TokenType {
@@ -56,20 +64,43 @@ impl Display for TokenType {
     }
 }
 
+/// Token struct for each lexeme
+// !TODO try implementing `Drop` traits
 #[derive(Debug)]
 pub struct Token {
+    /// Type of the token
     token_type: TokenType,
+    /// Actual string slice in source
     lexeme: String,
-    literal: String,
+    /// Type of literals in the language - e.g:string,number
+    literal: LiteralType,
+    /// Line number of token to be found
     line: usize,
 }
 
-impl Display for Token {
+impl Token {
+    /// A token struct.
+    ///
+    /// # Arguments
+    ///
+    /// * `token_type` - Type of token
+    /// * `lexeme` - Literal string slice from source
+    /// * `literal` - Type of literals in the language
+    /// * `line` - Line number in source code that token found
+    ///
+    /// # Returns `Token`
+    pub fn new(token_type: TokenType, lexeme: String, literal: LiteralType, line: usize) -> Token {
+        Token {
+            token_type,
+            lexeme,
+            literal,
+            line,
+        }
+    }
+}
+
+impl<'tok> Display for Token {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "{} - {} - {} at {} ",
-            self.token_type, self.lexeme, self.literal, self.line
-        )
+        write!(f, "{:#?}", self)
     }
 }
