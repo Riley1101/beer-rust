@@ -1,4 +1,4 @@
-use crate::scanner::Scanner;
+use crate::scanner::{scan_tokens, Scanner};
 use std::env;
 use std::fs;
 use std::io::Error;
@@ -38,9 +38,7 @@ pub fn read_args(cb: Callback) {
 }
 
 fn do_magic(input: String) {
-    let mut scanner = Scanner::new();
-    scanner.set_source(input);
-    scanner.scan_tokens();
+    scan_tokens(&input);
 }
 
 pub fn run() {
