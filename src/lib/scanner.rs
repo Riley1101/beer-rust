@@ -146,16 +146,17 @@ impl Scanner {
         token
     }
 
-    /// Get character at current location
+    /// Consume character at current location
     ///
     /// # Example
     ///
     /// ```
-    /// let next_char = self.get_current_char();
+    /// let next_char = self.advance();
     ///     
     /// ```
-    pub fn get_current_char(self: &Self) -> Option<char> {
+    pub fn advance(self: &mut Self) -> Option<char> {
         let c = self.source.chars().nth(self.current);
+        self.forward();
         c
     }
 
@@ -198,8 +199,7 @@ pub fn scan_tokens(input: String) -> TokenVec {
     let mut token_vec = TokenVec::new();
     let mut scanner = Scanner::new(input);
     while !scanner.is_end() {
-        let c = scanner.get_current_char();
-        scanner.forward();
+        let c = scanner.advance();
         let t = scanner.scan_token(&c);
         match t {
             Some(val) => {
