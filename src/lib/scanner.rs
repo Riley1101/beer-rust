@@ -92,6 +92,15 @@ impl Scanner {
                     let token = self.build_token(token_type, LiteralType::NONE);
                     Some(token)
                 }
+                '!' => {
+                    let token_type = if self.match_next("=") {
+                        TokenType::BANGEQUAL
+                    } else {
+                        TokenType::BANG
+                    };
+                    let token = self.build_token(token_type, LiteralType::NONE);
+                    Some(token)
+                }
                 '+' => {
                     let token = self.build_token(TokenType::PLUS, LiteralType::NONE);
                     Some(token)
@@ -157,22 +166,17 @@ impl Scanner {
     }
 
     fn build_token(&self, token_type: TokenType, literal: LiteralType) -> Token {
-        println!("{:?}", self.source.chars());
-        println!("{} {}", self.start, self.current);
         let lexeme = &self.source[self.start..self.current];
-        println!("{} ", lexeme);
         let token = Token::new(token_type, lexeme.to_string(), literal, self.line);
         token
     }
 
-    // TODO  !DOING Check the next character to see if they matches
     fn match_next(&mut self, expected: &str) -> bool {
         if self.is_end() {
             return false;
         }
-        let char = &self.source[self.current..self.current];
-        println!("current char {}", char);
-        if char == expected {
+        let char = &self.source[self.current..self.current + 1];
+        if char != expected {
             return false;
         }
         self.current += 1;
