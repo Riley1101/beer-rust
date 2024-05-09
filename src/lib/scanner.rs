@@ -137,6 +137,11 @@ impl Scanner {
                     let token = self.build_token(TokenType::DOT, LiteralType::NONE);
                     Some(token)
                 }
+                ';' => {
+                    let token = self.build_token(TokenType::SEMICOLON, LiteralType::NONE);
+                    Some(token)
+                }
+                '\\' => None,
                 '0'..='9' => None,
                 'A'..='z' => None,
                 _ => None,
@@ -151,7 +156,7 @@ impl Scanner {
     /// # Example
     ///
     /// ```
-    /// let next_char = self.advance();
+    /// let next_char = self.get_current_char();
     ///     
     /// ```
     pub fn advance(self: &mut Self) -> Option<char> {
@@ -182,6 +187,14 @@ impl Scanner {
         }
         self.current += 1;
         true
+    }
+
+    fn peek(&self) -> Option<char> {
+        if self.is_end() {
+            return Some('\0');
+        }
+        let char = &self.source[self.current..self.current];
+        Some(char)
     }
 }
 
