@@ -97,6 +97,10 @@ impl Token {
             line,
         }
     }
+
+    pub fn lexeme_length(self: Self) -> usize {
+        self.lexeme.len()
+    }
 }
 
 impl<'tok> Display for Token {

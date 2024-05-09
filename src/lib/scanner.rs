@@ -141,7 +141,18 @@ impl Scanner {
                     let token = self.build_token(TokenType::SEMICOLON, LiteralType::NONE);
                     Some(token)
                 }
-                '\\' => None,
+                '\\' => {
+                    let is_comment = "\\";
+                    if self.match_next(is_comment) {
+                        while self.peek()? == "\0" && !self.is_end() {
+                            self.advance();
+                        }
+                    } else {
+                        let token = self.build_token(TokenType::SLASH, LiteralType::NONE);
+                        return Some(token);
+                    }
+                    None
+                }
                 '0'..='9' => None,
                 'A'..='z' => None,
                 _ => None,
@@ -189,9 +200,9 @@ impl Scanner {
         true
     }
 
-    fn peek(&self) -> Option<char> {
+    fn peek(&self) -> Option<&str> {
         if self.is_end() {
-            return Some('\0');
+            return Some("\0");
         }
         let char = &self.source[self.current..self.current];
         Some(char)
