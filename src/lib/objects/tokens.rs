@@ -1,6 +1,8 @@
 #![allow(dead_code)]
 use std::fmt::Display;
 
+pub const END_LINE_STR: &str = "\0";
+
 #[derive(Debug)]
 pub enum LiteralType {
     STRING,

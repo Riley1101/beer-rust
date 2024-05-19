@@ -1,4 +1,4 @@
-use crate::objects::tokens::{LiteralType, Token, TokenType};
+use crate::objects::tokens::{LiteralType, Token, TokenType, END_LINE_STR};
 use std::fmt::Display;
 
 #[derive(Debug)]
@@ -81,7 +81,7 @@ impl Scanner {
 
     /// Scan tokens
     pub fn scan_token(&mut self, char: &Option<char>) -> Option<Token> {
-        let token = match char {
+        match char {
             Some(value) => match value {
                 '=' => {
                     let token_type = if self.match_next("=") {
@@ -144,7 +144,7 @@ impl Scanner {
                 '\\' => {
                     let is_comment = "\\";
                     if self.match_next(is_comment) {
-                        while self.peek()? == "\0" && !self.is_end() {
+                        while self.peek()? == END_LINE_STR && !self.is_end() {
                             self.advance();
                         }
                     } else {
@@ -153,13 +153,17 @@ impl Scanner {
                     }
                     None
                 }
+                '"' => None,
                 '0'..='9' => None,
                 'A'..='z' => None,
                 _ => None,
             },
             _ => None,
-        };
-        token
+        }
+    }
+
+    pub fn update_line(self: &mut Self) {
+        self.line += 1;
     }
 
     /// Consume character at current location
@@ -224,6 +228,7 @@ pub fn scan_tokens(input: String) -> TokenVec {
     let mut scanner = Scanner::new(input);
     while !scanner.is_end() {
         let c = scanner.advance();
+        println!("{:?}", c);
         let t = scanner.scan_token(&c);
         match t {
             Some(val) => {
